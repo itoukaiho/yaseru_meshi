@@ -1,0 +1,2 @@
+document.getElementById("favorite-btn-<%= @post.id %>").outerHTML =
+  '<%= j button_to "お気に入り", post_favorite_path(@post), method: :post, remote: true, id: "favorite-btn-#{@post.id}" %>';

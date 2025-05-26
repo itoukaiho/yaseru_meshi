@@ -1,0 +1,11 @@
+<h2>保存したメシ一覧</h2>
+<% @favorite_posts.each do |post| %>
+  <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <%= image_tag(post.image, width: 200) if post.image.attached? %>
+    <h3><%= link_to post.title, post_path(post) %></h3>
+    <p>店舗: <%= post.store %> / カロリー: <%= post.calorie %> kcal</p>
+
+    <!-- ここにお気に入り解除ボタンも入れてOK -->
+    <%= button_to 'お気に入り解除', post_favorite_path(post), method: :delete, remote: true, id: "favorite-btn-#{post.id}" %>
+  </div>
+<% end %>

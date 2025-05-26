@@ -1,0 +1,21 @@
+<h1>Posts#index</h1>
+<p>Find me in app/views/posts/index.html.erb</p>
+<h1>投稿一覧</h1>
+<% @posts.each do |post| %>
+  <div>
+    <%= image_tag(post.image, width: 200) if post.image.attached? %>
+    <h2><%= link_to post.title, post_path(post) %></h2>
+    <p>店舗: <%= post.store %> / カロリー: <%= post.calorie %> kcal</p>
+
+    <% if user_signed_in? %>
+      <% if current_user.liked_posts.exists?(post.id) %>
+        <%= button_to 'お気に入り解除', post_favorite_path(post), method: :delete, remote: true, id: "favorite-btn-#{post.id}" %>
+      <% else %>
+        <%= button_to 'お気に入り', post_favorite_path(post), method: :post, remote: true, id: "favorite-btn-#{post.id}" %>
+      <% end %>
+    <% else %>
+      <%= link_to 'ログインしてお気に入り', new_user_session_path %>
+    <% end %>
+  </div>
+<% end %>
+

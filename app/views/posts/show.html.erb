@@ -1,0 +1,10 @@
+<h1>Posts#show</h1>
+<p>Find me in app/views/posts/show.html.erb</p>
+<h1><%= @post.title %></h1>
+<%= image_tag(@post.image, width: 300) if @post.image.attached? %>
+<p>店舗: <%= @post.store %></p>
+<p>カロリー: <%= @post.calorie %> kcal</p>
+<p>たんぱく質: <%= @post.protein %> g</p>
+<p>脂質: <%= @post.fat %> g</p>
+<p>炭水化物: <%= @post.carb %> g</p>
+<p>価格: <%= @post.price %> 円</p>

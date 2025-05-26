@@ -1,0 +1,10 @@
+<h1>人気メシ TOP10</h1>
+
+<% @popular_posts.each_with_index do |post, index| %>
+  <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <h2><%= "#{index + 1}位：" %><%= link_to post.title, post_path(post) %></h2>
+    <%= image_tag(post.image, width: 200) if post.image.attached? %>
+    <p>店舗: <%= post.store %> / カロリー: <%= post.calorie %> kcal</p>
+    <p>お気に入り数: <%= post.favorites.count %></p>
+  </div>
+<% end %>

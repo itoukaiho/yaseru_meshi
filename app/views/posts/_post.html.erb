@@ -1,0 +1,9 @@
+<% if user_signed_in? %>
+  <% if current_user.liked_posts.exists?(post.id) %>
+    <%= button_to 'お気に入り解除', post_favorite_path(post), method: :delete, remote: true, id: "favorite-btn-#{post.id}" %>
+  <% else %>
+    <%= button_to 'お気に入り', post_favorite_path(post), method: :post, remote: true, id: "favorite-btn-#{post.id}" %>
+  <% end %>
+<% else %>
+  <%= link_to 'ログインしてお気に入り', new_user_session_path %>
+<% end %>
