@@ -1,21 +1,48 @@
-<h1>Posts#index</h1>
-<p>Find me in app/views/posts/index.html.erb</p>
-<h1>投稿一覧</h1>
-<% @posts.each do |post| %>
-  <div>
-    <%= image_tag(post.image, width: 200) if post.image.attached? %>
-    <h2><%= link_to post.title, post_path(post) %></h2>
-    <p>店舗: <%= post.store %> / カロリー: <%= post.calorie %> kcal</p>
+<h1 class="mb-4 text-center text-primary fw-bold">投稿一覧 - ヤセルメシ</h1>
 
-    <% if user_signed_in? %>
-      <% if current_user.liked_posts.exists?(post.id) %>
-        <%= button_to 'お気に入り解除', post_favorite_path(post), method: :delete, remote: true, id: "favorite-btn-#{post.id}" %>
-      <% else %>
-        <%= button_to 'お気に入り', post_favorite_path(post), method: :post, remote: true, id: "favorite-btn-#{post.id}" %>
-      <% end %>
-    <% else %>
-      <%= link_to 'ログインしてお気に入り', new_user_session_path %>
-    <% end %>
-  </div>
-<% end %>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <% @posts.each do |post| %>
+    <div class="col">
+      <div class="food-card h-100 d-flex flex-column">
+        <% if post.image.attached? %>
+          <%= image_tag post.image, class: "food-card-img" %>
+        <% else %>
+          <div style="background:#eee; aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; color:#aaa;">
+            画像なし
+          </div>
+        <% end %>
+
+        <div class="p-3 d-flex flex-column flex-grow-1">
+          <h5 class="food-card-title">
+            <%= link_to post.title, post_path(post), class: "text-decoration-none" %>
+          </h5>
+
+          <ul class="nutrition-list list-unstyled mb-4 flex-grow-1">
+            <li><strong>店舗:</strong> <%= post.store %></li>
+            <li><strong>カロリー:</strong> <%= post.calorie %> kcal</li>
+            <li><strong>たんぱく質:</strong> <%= post.protein %> g</li>
+            <li><strong>脂質:</strong> <%= post.fat %> g</li>
+            <li><strong>炭水化物:</strong> <%= post.carb %> g</li>
+            <li><strong>価格:</strong> <%= number_to_currency(post.price, unit: "¥") %></li>
+          </ul>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <% if user_signed_in? %>
+              <% if current_user.liked_posts.exists?(post.id) %>
+                <%= button_to 'お気に入り解除', post_favorite_path(post), method: :delete, remote: true, class: "btn btn-danger btn-sm btn-rounded", id: "favorite-btn-#{post.id}" %>
+              <% else %>
+                <%= button_to 'お気に入り', post_favorite_path(post), method: :post, remote: true, class: "btn btn-primary btn-sm btn-rounded", id: "favorite-btn-#{post.id}" %>
+              <% end %>
+            <% else %>
+              <%= link_to 'ログインしてお気に入り', new_user_session_path, class: "btn btn-secondary btn-sm btn-rounded" %>
+            <% end %>
+
+            <%= link_to 'MAPで見る', maps_path, class: "btn btn-success btn-sm btn-rounded" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
 

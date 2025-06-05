@@ -5,38 +5,45 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_importmap_tags %>
-    <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </head>
 
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-custom navbar-light mb-4">
       <div class="container">
-        <%= link_to 'ヤセルメシ', root_path, class: 'navbar-brand' %>
+        <%= link_to '🍽 ヤセルメシ', root_path, class: 'navbar-brand fw-bold text-white' %>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <%= link_to '投稿一覧', posts_path, class: 'nav-link' %>
-            <%= link_to '新規投稿', new_post_path, class: 'nav-link' %>
-            <%= link_to 'ヤセルメシTOP10', ranking_posts_path, class: 'nav-link' %>
+            <li class="nav-item">
+              <%= link_to '投稿一覧', posts_path, class: 'nav-link text-white' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to '新規投稿', new_post_path, class: 'nav-link text-white' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'TOP10', ranking_posts_path, class: 'nav-link text-white' %>
+            </li>
             <% if user_signed_in? %>
               <li class="nav-item">
-                <%= link_to 'マイページ', edit_user_registration_path(current_user), class: 'nav-link' %>
+                <%= link_to 'お気入り', user_favorites_path(current_user), class: 'nav-link text-white' %>
               </li>
               <li class="nav-item">
-                <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link' %>
+                <%= link_to 'マイページ', edit_user_registration_path(current_user), class: 'nav-link text-white' %>
+              </li>
+              <li class="nav-item">
+                <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link text-white' %>
               </li>
             <% else %>
               <li class="nav-item">
-                <%= link_to 'ログイン', new_user_session_path, class: 'nav-link' %>
+                <%= link_to 'ログイン', new_user_session_path, class: 'nav-link text-white' %>
               </li>
               <li class="nav-item">
-                <%= link_to '新規登録', new_user_registration_path, class: 'nav-link' %>
+                <%= link_to '新規登録', new_user_registration_path, class: 'nav-link text-white' %>
               </li>
             <% end %>
           </ul>
@@ -60,7 +67,7 @@
     </div>
 
     <!-- フッター -->
-    <footer class="bg-light text-center text-muted py-3">
+    <footer class="bg-white text-center text-muted py-3">
       <small>© 2025 ヤセルメシ - 健康な食生活をサポート</small>
     </footer>
   </body>

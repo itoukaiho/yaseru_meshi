@@ -5,7 +5,7 @@ class Post < ApplicationRecord
   has_many :liked_users, through: :favorites, source: :user
 
   geocoded_by :store_address  # 後述のメソッド名
-  after_validation :geocode, if: :store_changed?
+  after_validation :geocode, if: :will_save_change_to_store?
 
   before_validation :fetch_nutrition_info, if: -> {
     calorie.blank? || protein.blank? || fat.blank? || carb.blank?
@@ -23,6 +23,26 @@ scope :popular, -> {
     .order('COUNT(favorites.id) DESC')
 }
 
+def store_address
+  {
+    "セブン" => "東京都千代田区永田町1-7-1",
+    "ローソン" => "東京都港区虎ノ門1-1-1",
+    "ファミマ" => "東京都新宿区西新宿1-1-3",
+    "大戸屋" => "東京都渋谷区宇田川町21-6",
+    "やよい軒" => "東京都中央区銀座2-11-2",
+    "なか卯" => "東京都千代田区神田須田町1-6",
+    "すき家" => "東京都渋谷区道玄坂2-6-6",
+    "吉野家" => "東京都港区新橋2-16-1",
+    "松屋" => "東京都中野区中野5-65-6",
+    "ガスト" => "東京都文京区本郷1-33-6",
+    "サイゼリヤ" => "東京都千代田区外神田1-16-10",
+    "サブウェイ" => "東京都港区南青山3-1-31",
+    "モスバーガー" => "東京都豊島区東池袋1-2-2",
+    "ロイヤルホスト" => "東京都品川区西五反田1-2-8"
+  }[store]
+end
+
+
 private
 
   def fetch_nutrition_info
@@ -36,26 +56,3 @@ private
     self.carb    ||= result[:carb]
   end
 end
-
-
-
-  def store_address
-    {
-      "セブン" => "東京都千代田区永田町1-7-1",
-      "ローソン" => "東京都港区虎ノ門1-1-1",
-      "ファミマ" => "東京都新宿区西新宿1-1-3",
-      "大戸屋" => "東京都渋谷区宇田川町21-6",
-      "やよい軒" => "東京都中央区銀座2-11-2",
-      "なか卯" => "東京都千代田区神田須田町1-6",
-      "すき家" => "東京都渋谷区道玄坂2-6-6",
-      "吉野家" => "東京都港区新橋2-16-1",
-      "松屋" => "東京都中野区中野5-65-6",
-      "ガスト" => "東京都文京区本郷1-33-6",
-      "サイゼリヤ" => "東京都千代田区外神田1-16-10",
-      "サブウェイ" => "東京都港区南青山3-1-31",
-      "モスバーガー" => "東京都豊島区東池袋1-2-2",
-      "ロイヤルホスト" => "東京都品川区西五反田1-2-8"
-    }[store]
-
-   
-  end
