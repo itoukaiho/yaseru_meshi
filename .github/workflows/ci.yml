@@ -84,6 +84,11 @@ jobs:
     steps:
       - name: コードをチェックアウト
         uses: actions/checkout@v3
+          with:
+        fetch-depth: 0   # これを入れても浅いクローン回避可能
+
+      - name: Unshallow the git repository
+        run: git fetch --all --unshallow
 
       - name: Rubyをセットアップ
         uses: ruby/setup-ruby@v1
