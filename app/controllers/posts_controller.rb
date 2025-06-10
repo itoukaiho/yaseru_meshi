@@ -1,8 +1,14 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: %i[index show]
 
   def index
-    @posts = Post.all.order(created_at: :desc)
+    @posts = Post.order(created_at: :desc)
+  end
+
+  def show
+    @post = Post.find(params[:id])
   end
 
   def new
@@ -16,10 +22,6 @@ class PostsController < ApplicationController
     else
       render :new
     end
-  end
-
-  def show
-    @post = Post.find(params[:id])
   end
 
   def ranking

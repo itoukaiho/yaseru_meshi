@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FavoritesController < ApplicationController
   before_action :authenticate_user!
 
@@ -7,7 +9,7 @@ class FavoritesController < ApplicationController
     if @favorite.save
       respond_to do |format|
         format.html { redirect_to posts_path, notice: 'お気に入り登録しました' }
-        format.js   # create.js.erb で非同期対応
+        format.js # create.js.erb で非同期対応
       end
     else
       # すでにお気に入り登録済みなどの処理
@@ -21,7 +23,7 @@ class FavoritesController < ApplicationController
     if @favorite&.destroy
       respond_to do |format|
         format.html { redirect_to posts_path, notice: 'お気に入り解除しました' }
-        format.js   # destroy.js.erb で非同期対応
+        format.js # destroy.js.erb で非同期対応
       end
     else
       head :not_found

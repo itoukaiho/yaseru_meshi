@@ -9,7 +9,27 @@ on:
       - main
 
 jobs:
-  test:
+  lint: # Rubocopチェック用ジョブ
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Rubyをセットアップ
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+
+      - name: Bundler & 依存関係インストール
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+
+      - name: Rubocopを実行
+        run: bundle exec rubocop
+
+  test: # RSpecテスト用ジョブ
     runs-on: ubuntu-latest
 
     services:
@@ -58,7 +78,7 @@ jobs:
         run: bundle exec rspec
 
   deploy:
-    needs: test # testジョブ成功後に実行
+    needs: [lint, test] # どちらも成功してから実行
     runs-on: ubuntu-latest
 
     steps:

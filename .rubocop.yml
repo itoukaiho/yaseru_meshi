@@ -1,1 +1,63 @@
-inherit_from: .rubocop_todo.yml
+require:
+  - rubocop-rails
+  - rubocop-performance
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  Exclude:
+    - "bin/**/*"
+    - "db/schema.rb"
+    - "node_modules/**/*"
+    - "vendor/**/*"
+
+# クラス・モジュールの先頭にコメントがない場合の警告を抑制
+Style/Documentation:
+  Enabled: false
+
+# 行の長さ
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - "config/initializers/devise.rb"
+
+# テストなどの長めのブロックを許容
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+    - "config/environments/*.rb"
+
+RSpec/ExampleLength:
+  Max: 7
+
+# fat_secret_clientなど現実的な長さを許容
+Metrics/AbcSize:
+  Max: 25
+  Exclude:
+    - "db/migrate/*.rb"
+
+Metrics/MethodLength:
+  Max: 25
+  Exclude:
+    - "db/migrate/*.rb"
+
+# 名前に関するルールの緩和
+Naming/AccessorMethodName:
+  Enabled: false
+
+# I18n対応の警告を一時的に無効化
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+# 複雑なwhere.not条件を許容
+Rails/WhereNotWithMultipleConditions:
+  Enabled: false
+
+# has_many に dependent オプションを強制しない
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+# マイグレーションのテーブル変更について柔軟に対応
+Rails/BulkChangeTable:
+  Enabled: false
