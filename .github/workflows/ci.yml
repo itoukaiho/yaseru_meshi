@@ -87,9 +87,6 @@ jobs:
         with:
           fetch-depth: 0 # これで浅いクローンを防げます
 
-      - name: Unshallow the git repository
-        run: git fetch --all --unshallow
-
       - name: Rubyをセットアップ
         uses: ruby/setup-ruby@v1
         with:
