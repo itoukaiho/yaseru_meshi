@@ -2,12 +2,10 @@
 
 module Users
   class SessionsController < Devise::SessionsController
-    def self.guest
-      user = find_or_initialize_by(email: 'guest@example.com')
-      user.password ||= SecureRandom.urlsafe_base64(8)
-      user.name ||= 'ゲストユーザー'
-      user.save! if user.new_record? || user.changed?
-      user
+    def guest_sign_in
+      user = User.guest
+      sign_in user
+      redirect_to root_path, notice: 'ゲストユーザーとしてログインしました。'
     end
   end
 end
