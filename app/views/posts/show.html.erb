@@ -1,5 +1,4 @@
-<h1>Posts#show</h1>
-<p>Find me in app/views/posts/show.html.erb</p>
+<h1>商品の詳細</h1>
 <h1><%= @post.title %></h1>
 <%= image_tag(@post.image, width: 300) if @post.image.attached? %>
 <p>店舗: <%= @post.store %></p>
@@ -8,3 +7,7 @@
 <p>脂質: <%= @post.fat %> g</p>
 <p>炭水化物: <%= @post.carb %> g</p>
 <p>価格: <%= @post.price %> 円</p>
+
+<%= link_to "編集する", edit_post_path(@post), class: "btn btn-primary" %>
+
+<%= link_to "投稿一覧に戻る", posts_path %>

@@ -1,0 +1,14 @@
+ja:
+  activerecord:
+    errors:
+      models:
+        post:
+          attributes:
+            title:
+              blank: "を入力してください"
+            store:
+              blank: "を入力してください"
+            price:
+              blank: "を入力してください"
+              not_a_number: "は数値で入力してください"
+              greater_than_or_equal_to: "は0以上で入力してください"

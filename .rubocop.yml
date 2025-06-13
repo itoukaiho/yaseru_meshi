@@ -61,3 +61,6 @@ Rails/HasManyOrHasOneDependent:
 # マイグレーションのテーブル変更について柔軟に対応
 Rails/BulkChangeTable:
   Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false

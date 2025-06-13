@@ -1,5 +1,4 @@
-<h1>Posts#new</h1>
-<p>Find me in app/views/posts/new.html.erb</p>
+<h1>新規投稿</h1>
 
 <%= form_with(model: @post, local: true) do |form| %>
   <%= form.label :title, "商品名" %>
@@ -12,13 +11,13 @@
   <%= form.number_field :calorie %>
 
   <%= form.label :protein, "たんぱく質 (g)" %>
-  <%= form.number_field :protein %>
+  <%= form.number_field :protein, step: 0.1 %>
 
   <%= form.label :fat, "脂質 (g)" %>
-  <%= form.number_field :fat %>
+  <%= form.number_field :fat, step: 0.1%>
 
   <%= form.label :carb, "炭水化物 (g)" %>
-  <%= form.number_field :carb %>
+  <%= form.number_field :carb, step: 0.1 %>
 
   <%= form.label :price, "価格 (円)" %>
   <%= form.number_field :price %>
@@ -30,6 +29,7 @@
 
   <p style="margin-top: 20px;">
     栄養成分,価格がわからない場合は、<a href="https://chat.openai.com/?utm_source=yaserumeshi" target="_blank" rel="noopener">こちら</a>からChatGPTに相談してみてください。
+    例：「セブンイレブンのサラダチキンの栄養成分と価格を教えて」など
   </p>
 
 <% end %>
