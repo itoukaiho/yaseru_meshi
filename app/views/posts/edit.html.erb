@@ -1,0 +1,64 @@
+<h1>投稿を編集する</h1>
+
+<%= form_with(model: @post, local: true) do |form| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, "エラー") %>があります。</h2>
+      <ul>
+        <% @post.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, "商品名" %><br>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :calorie, "カロリー" %><br>
+    <%= form.number_field :calorie %>
+  </div>
+
+  <div>
+    <%= form.label :protein, "たんぱく質" %><br>
+    <%= form.number_field :protein %>
+  </div>
+
+  <div>
+    <%= form.label :fat, "脂質" %><br>
+    <%= form.number_field :fat %>
+  </div>
+
+  <div>
+    <%= form.label :carb, "炭水化物" %><br>
+    <%= form.number_field :carb %>
+  </div>
+
+  <div>
+    <%= form.label :price, "価格" %><br>
+    <%= form.number_field :price %>
+  </div>
+
+  <div>
+    <%= form.label :store, "店舗" %><br>
+    <%= form.select :store, ['セブン', 'ローソン', 'ファミマ', '大戸屋', 'やよい軒', 'なか卯', 'すき家', '吉野家', '松屋', 'ガスト', 'サイゼリヤ', 'サブウェイ', 'モスバーガー', 'ロイヤルホスト'] %>
+  </div>
+
+  <div>
+    <%= form.label :image, "画像" %><br>
+    <%= form.file_field :image %>
+    <% if @post.image.attached? %>
+      <p>現在の画像:</p>
+      <%= image_tag @post.image.variant(resize_to_limit: [200, 200]) %>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.submit "更新する" %>
+  </div>
+<% end %>
+
+<%= link_to "投稿詳細に戻る", @post %>
