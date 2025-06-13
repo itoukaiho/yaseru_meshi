@@ -14,6 +14,10 @@ class Post < ApplicationRecord
 
   validates :title, :store, :price, presence: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }
+  validates :title, uniqueness: {
+    scope: %i[store user_id],
+    message: 'はこの店舗で既に投稿されています'
+  }
 
   STORE_OPTIONS = %w[
     セブン ローソン ファミマ 大戸屋 やよい軒 なか卯 すき家
