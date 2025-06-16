@@ -57,6 +57,11 @@
   </div>
 
   <div>
+    <%= form.label :comment, "コメント" %><br>
+    <%= form.text_area :comment, rows: 4 %>
+  </div>
+
+  <div>
     <%= form.submit "更新する" %>
   </div>
 <% end %>

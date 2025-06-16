@@ -24,6 +24,7 @@
             <li><strong>脂質:</strong> <%= post.fat %> g</li>
             <li><strong>炭水化物:</strong> <%= post.carb %> g</li>
             <li><strong>価格:</strong> <%= number_to_currency(post.price, unit: "¥", precision: 0) %></li>
+            <li><strong>コメント:</strong> <%= post.comment.presence || "（コメントなし）" %></li>
           </ul>
 
           <div class="d-flex justify-content-between align-items-center">

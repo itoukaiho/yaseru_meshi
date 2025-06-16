@@ -7,6 +7,10 @@
 <p>脂質: <%= @post.fat %> g</p>
 <p>炭水化物: <%= @post.carb %> g</p>
 <p>価格: <%= @post.price %> 円</p>
+<div>
+  <strong>コメント:</strong>
+  <p><%= @post.comment.present? ? @post.comment : "コメントはありません" %></p>
+</div>
 
 <%= link_to "編集する", edit_post_path(@post), class: "btn btn-primary" %>
 
