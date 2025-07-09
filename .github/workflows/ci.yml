@@ -97,20 +97,10 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
 
-      - name: Herokuへデプロイ
+      - name: Herokuへデプロイ（API Key 埋め込み方式）
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
-          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
         run: |
-          echo "machine api.heroku.com" > $HOME/.netrc
-          echo "login $HEROKU_EMAIL" >> $HOME/.netrc
-          echo "password $HEROKU_API_KEY" >> $HOME/.netrc
-          echo "machine git.heroku.com" >> $HOME/.netrc
-          echo "login $HEROKU_EMAIL" >> $HOME/.netrc
-          echo "password $HEROKU_API_KEY" >> $HOME/.netrc
-
-          chmod 600 $HOME/.netrc
-
-          git remote add heroku https://git.heroku.com/${HEROKU_APP_NAME}.git
+          git remote add heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME}.git
           git push heroku main -f
