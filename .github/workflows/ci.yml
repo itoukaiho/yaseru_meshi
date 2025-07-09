@@ -103,12 +103,12 @@ jobs:
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
           HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
         run: |
-          echo "machine api.heroku.com
-          login $HEROKU_EMAIL
-          password $HEROKU_API_KEY
-          machine git.heroku.com
-          login $HEROKU_EMAIL
-          password $HEROKU_API_KEY" > $HOME/.netrc
+          echo "machine api.heroku.com" > $HOME/.netrc
+          echo "login $HEROKU_EMAIL" >> $HOME/.netrc
+          echo "password $HEROKU_API_KEY" >> $HOME/.netrc
+          echo "machine git.heroku.com" >> $HOME/.netrc
+          echo "login $HEROKU_EMAIL" >> $HOME/.netrc
+          echo "password $HEROKU_API_KEY" >> $HOME/.netrc
 
           chmod 600 $HOME/.netrc
 
