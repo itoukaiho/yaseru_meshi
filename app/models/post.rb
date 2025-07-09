@@ -30,6 +30,23 @@ class Post < ApplicationRecord
       .order('COUNT(favorites.id) DESC')
   }
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[
+      title
+      store
+      comment
+      price
+      calorie
+      protein
+      fat
+      carb
+      favorites_count
+      user_id
+      created_at
+      updated_at
+    ]
+  end
+  
   def store_address
     {
       'セブン' => '東京都千代田区永田町1-7-1',
