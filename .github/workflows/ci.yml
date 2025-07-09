@@ -97,6 +97,10 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
 
+      - name: Heroku CLIをインストール
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
       - name: Heroku CLI でログイン & デプロイ
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
