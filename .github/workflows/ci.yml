@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  lint: # Rubocopチェック用ジョブ
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +29,7 @@ jobs:
       - name: Rubocopを実行
         run: bundle exec rubocop
 
-  test: # RSpecテスト用ジョブ
+  test:
     runs-on: ubuntu-latest
 
     services:
@@ -78,14 +78,14 @@ jobs:
         run: bundle exec rspec
 
   deploy:
-    needs: [lint, test] # どちらも成功してから実行
+    needs: [lint, test]
     runs-on: ubuntu-latest
 
     steps:
       - name: コードをチェックアウト
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # これで浅いクローンを防げます
+          fetch-depth: 0
 
       - name: Rubyをセットアップ
         uses: ruby/setup-ruby@v1
@@ -103,11 +103,15 @@ jobs:
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
           HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
         run: |
+          cat <<EOF > ~/.netrc
+          machine api.heroku.com
+          login $HEROKU_EMAIL
+          password $HEROKU_API_KEY
+          machine git.heroku.com
+          login $HEROKU_EMAIL
+          password $HEROKU_API_KEY
+          EOF
+          chmod 600 ~/.netrc
+
           git remote add heroku https://git.heroku.com/${HEROKU_APP_NAME}.git
-          echo "machine api.heroku.com
-          login ${HEROKU_EMAIL}
-          password ${HEROKU_API_KEY}" > ~/.netrc
-          echo "machine git.heroku.com
-          login ${HEROKU_EMAIL}
-          password ${HEROKU_API_KEY}" >> ~/.netrc
           git push heroku main -f
