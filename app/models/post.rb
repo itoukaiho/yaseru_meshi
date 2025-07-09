@@ -30,7 +30,7 @@ class Post < ApplicationRecord
       .order('COUNT(favorites.id) DESC')
   }
 
-  def self.ransackable_attributes(auth_object = nil)
+  def self.ransackable_attributes(_auth_object = nil)
     %w[
       title
       store
@@ -46,7 +46,7 @@ class Post < ApplicationRecord
       updated_at
     ]
   end
-  
+
   def store_address
     {
       'セブン' => '東京都千代田区永田町1-7-1',
