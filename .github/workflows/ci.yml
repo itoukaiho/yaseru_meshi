@@ -73,6 +73,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: デバッグ用：秘密鍵の一部を表示
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -n 3
+          echo "..."
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tail -n 3
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
