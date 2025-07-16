@@ -76,9 +76,7 @@ jobs:
       - name: SSH鍵をセットアップ
         run: |
           mkdir -p ~/.ssh
-          cat <<EOF > ~/.ssh/id_rsa
-${{ secrets.HEROKU_SSH_PRIVATE_KEY }}
-EOF
+          printf "%s" "${{ secrets.HEROKU_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
 
