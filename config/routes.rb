@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get 'up' => 'rails/health#show', as: :rails_health_check
 
   namespace :api do
-    resources :posts, only: [] do
+    resources :posts do
       member do
         post :generate_advice
       end

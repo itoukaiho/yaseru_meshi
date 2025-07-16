@@ -52,40 +52,41 @@ class PostsController < ApplicationController
     @popular_posts = Post.popular.limit(10)
   end
 
-  class Api::PostsController < ApplicationController
-    protect_from_forgery with: :null_session # JSから叩く用
-  
-    def generate_advice
-      post = Post.find(params[:id])
-  
-      client = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
-  
-      prompt = <<~PROMPT
-        あなたは栄養士です。
-        以下の料理を低カロリーにする具体的なアドバイスを2〜3個提案してください。
-  
-        料理名: #{post.title}
-      PROMPT
-  
-      response = client.chat(
-        parameters: {
-          model: "gpt-4o", # または "gpt-4-turbo"
-          messages: [
-            { role: "user", content: prompt }
-          ],
-          temperature: 0.7
-        }
-      )
-  
-      advice = response.dig("choices", 0, "message", "content")
-      post.update(advice: advice)
-  
-      render json: { advice: advice }
-    rescue => e
-      render json: { error: e.message }, status: 500
+  module Api
+    class PostsController < ApplicationController
+      protect_from_forgery with: :null_session # JSから叩く用
+
+      def generate_advice
+        post = Post.find(params[:id])
+
+        client = OpenAI::Client.new(access_token: ENV.fetch('OPENAI_API_KEY', nil))
+
+        prompt = <<~PROMPT
+          あなたは栄養士です。
+          以下の料理を低カロリーにする具体的なアドバイスを2〜3個提案してください。
+
+          料理名: #{post.title}
+        PROMPT
+
+        response = client.chat(
+          parameters: {
+            model: 'gpt-4o', # または "gpt-4-turbo"
+            messages: [
+              { role: 'user', content: prompt }
+            ],
+            temperature: 0.7
+          }
+        )
+
+        advice = response.dig('choices', 0, 'message', 'content')
+        post.update(advice: advice)
+
+        render json: { advice: advice }
+      rescue StandardError => e
+        render json: { error: e.message }, status: :internal_server_error
+      end
     end
   end
-  
 
   private
 
