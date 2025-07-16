@@ -64,7 +64,7 @@ jobs:
       - name: RSpec テスト実行
         run: bundle exec rspec
 
-    deploy:
+  deploy:
     needs: [lint, test]
     runs-on: ubuntu-latest
     steps:
