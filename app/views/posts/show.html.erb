@@ -12,6 +12,17 @@
   <p><%= @post.comment.present? ? @post.comment : "コメントはありません" %></p>
 </div>
 
-<%= link_to "編集する", edit_post_path(@post), class: "btn btn-primary" %>
+<h3>AIおすすめポイント</h3>
+<% if @post.advice.present? %>
+  <p><%= simple_format(@post.advice) %></p>
+<% else %>
+  <p>AIコメントはまだ生成されていません。</p>
+<% end %>
 
-<%= link_to "投稿一覧に戻る", posts_path %>
+<div class="d-flex gap-2">
+  <%= link_to "編集する", edit_post_path(@post), class: "btn btn-primary" %>
+  <%= link_to "投稿一覧に戻る", posts_path, class: "btn btn-secondary" %>
+  <% if current_user == @post.user %>
+    <%= button_to '削除', post_path(@post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: "btn btn-danger" %>
+  <% end %>
+</div>

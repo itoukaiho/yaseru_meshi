@@ -1,10 +1,28 @@
-<h1>人気メシ TOP10</h1>
+<h1 class="mb-5 text-center text-danger fw-bold display-5">
+  人気メシ TOP10
+</h1>
 
-<% @popular_posts.each_with_index do |post, index| %>
-  <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-    <h2><%= "#{index + 1}位：" %><%= link_to post.title, post_path(post) %></h2>
-    <%= image_tag(post.image, width: 200) if post.image.attached? %>
-    <p>店舗: <%= post.store %> / カロリー: <%= post.calorie %> kcal</p>
-    <p>お気に入り数: <%= post.favorites.count %></p>
-  </div>
-<% end %>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <% @popular_posts.each_with_index do |post, index| %>
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <% if post.image.attached? %>
+          <%= image_tag post.image, class: "card-img-top", style: "object-fit: cover; height: 200px;" %>
+        <% else %>
+          <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px; color: #aaa;">
+            画像なし
+          </div>
+        <% end %>
+        <div class="card-body">
+          <h5 class="card-title">
+            <span class="badge bg-danger me-2">No.<%= index + 1 %></span>
+            <%= link_to post.title, post_path(post), class: "text-decoration-none text-dark fw-bold" %>
+          </h5>
+          <p class="card-text mb-1"><i class="bi bi-shop"></i> 店舗: <%= post.store %></p>
+          <p class="card-text mb-1"><i class="bi bi-fire"></i> カロリー: <%= post.calorie %> kcal</p>
+          <p class="card-text"><i class="bi bi-heart-fill text-danger"></i> お気に入り数: <%= post.favorites.count %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,38 +1,66 @@
-<h1>新規投稿</h1>
+<h1 class="mb-4 text-center text-primary fw-bold">新規投稿</h1>
 
-<%= form_with(model: @post, local: true) do |form| %>
-  <%= form.label :title, "商品名" %>
-  <%= form.text_field :title %>
+<%= form_with(model: @post, local: true, html: { class: "needs-validation", novalidate: true }) do |form| %>
+  <div class="row g-3">
 
-  <%= form.label :store, "店舗" %>
-  <%= form.select :store, Post::STORE_OPTIONS %>
+    <div class="col-md-6">
+      <%= form.label :title, "商品名", class: "form-label" %>
+      <%= form.text_field :title, class: "form-control", placeholder: "例）サラダチキン" %>
+    </div>
 
-  <%= form.label :calorie, "カロリー (kcal)" %>
-  <%= form.number_field :calorie %>
+    <div class="col-md-6">
+      <%= form.label :store, "店舗", class: "form-label" %>
+      <%= form.select :store, Post::STORE_OPTIONS, {}, class: "form-select" %>
+    </div>
 
-  <%= form.label :protein, "たんぱく質 (g)" %>
-  <%= form.number_field :protein, step: 0.1 %>
+    <div class="col-md-4">
+      <%= form.label :calorie, "カロリー (kcal)", class: "form-label" %>
+      <%= form.number_field :calorie, class: "form-control", placeholder: "例）120" %>
+    </div>
 
-  <%= form.label :fat, "脂質 (g)" %>
-  <%= form.number_field :fat, step: 0.1%>
+    <div class="col-md-4">
+      <%= form.label :protein, "たんぱく質 (g)", class: "form-label" %>
+      <%= form.number_field :protein, class: "form-control", step: 0.1, placeholder: "例）25.5" %>
+    </div>
 
-  <%= form.label :carb, "炭水化物 (g)" %>
-  <%= form.number_field :carb, step: 0.1 %>
+    <div class="col-md-4">
+      <%= form.label :fat, "脂質 (g)", class: "form-label" %>
+      <%= form.number_field :fat, class: "form-control", step: 0.1, placeholder: "例）2.3" %>
+    </div>
 
-  <%= form.label :price, "価格 (円)" %>
-  <%= form.number_field :price %>
+    <div class="col-md-6">
+      <%= form.label :carb, "炭水化物 (g)", class: "form-label" %>
+      <%= form.number_field :carb, class: "form-control", step: 0.1, placeholder: "例）3.4" %>
+    </div>
 
-  <%= form.label :image, "画像" %>
-  <%= form.file_field :image %>
+    <div class="col-md-6">
+      <%= form.label :price, "価格 (円)", class: "form-label" %>
+      <%= form.number_field :price, class: "form-control", placeholder: "例）450" %>
+    </div>
 
-  <%= form.label :comment, "コメント" %>
-  <%= form.text_area :comment %>
+    <div class="col-12">
+      <%= form.label :image, "画像", class: "form-label" %>
+      <%= form.file_field :image, class: "form-control" %>
+    </div>
 
-  <%= form.submit "投稿する" %>
+    <div class="col-12">
+      <%= form.label :comment, "コメント", class: "form-label" %>
+      <%= form.text_area :comment, class: "form-control", rows: 4, placeholder: "自由にコメントを入力してください" %>
+    </div>
+  </div>
 
-  <p style="margin-top: 20px;">
-    栄養成分,価格がわからない場合は、<a href="https://chat.openai.com/?utm_source=yaserumeshi" target="_blank" rel="noopener">こちら</a>からChatGPTに相談してみてください。
+  <p class="mt-5 text-center">
+  <a href="https://chat.openai.com/?utm_source=yaserumeshi" target="_blank" rel="noopener" class="chatgpt-link">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT">
+    ChatGPTで栄養成分・価格を調べる
+  </a>
+  </p>
+
+  <p class="text-center text-muted" style="font-size: 0.9rem;">
     例：「セブンイレブンのサラダチキンの栄養成分と価格を教えて」など
   </p>
 
+  <div class="mt-4 text-center">
+      <%= form.submit "投稿する", class: "btn btn-primary px-5" %>
+  </div>
 <% end %>

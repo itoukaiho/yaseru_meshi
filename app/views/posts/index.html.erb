@@ -1,41 +1,62 @@
 <h1 class="mb-4 text-center text-primary fw-bold">投稿一覧 - ヤセルメシ</h1>
 
-<%= search_form_for @q, url: posts_path, method: :get, html: { class: "mb-4" } do |f| %>
-  <div class="row g-3">
+<p class="mx-auto mb-4 px-3 py-3 text-center text-secondary bg-light rounded shadow-sm" 
+   style="max-width: 750px; font-size: 1rem; line-height: 1.6;">
+  <span class="fw-bold text-primary">「ヤセルメシ」</span>は、低カロリー・高たんぱくな外食メニューを投稿・共有できるWebサービスです。<br>
+  価格・カロリー・栄養で絞り込み、あなたにぴったりのヘルシーメニューを見つけましょう！
+</p>
 
+<%= search_form_for @q, url: posts_path, method: :get, html: { class: "p-3 bg-light rounded shadow-sm mb-4" } do |f| %>
+  <p class="mb-3 text-center text-muted" style="font-size: 0.95rem;">
+    条件を入力して、お好みの低カロリー・高たんぱくメニューを検索できます
+  </p>
+
+  <div class="row g-3">
     <div class="col-md-4">
-      <%= f.label :store_cont, "店舗名", class: "form-label" %>
+      <%= f.label :store_cont, class: "form-label fw-semibold" do %>
+        <i class="bi bi-shop me-1"></i> 店舗名
+      <% end %>
       <%= f.search_field :store_cont, class: "form-control", placeholder: "例）セブンイレブン" %>
     </div>
 
     <div class="col-md-2">
-      <%= f.label :price_lteq, "最大価格（円）", class: "form-label" %>
+      <%= f.label :price_lteq, class: "form-label fw-semibold" do %>
+        <i class="bi bi-currency-yen me-1"></i> 最大価格
+      <% end %>
       <%= f.number_field :price_lteq, class: "form-control", placeholder: "例）500" %>
     </div>
 
     <div class="col-md-2">
-      <%= f.label :calorie_lteq, "最大カロリー", class: "form-label" %>
+      <%= f.label :calorie_lteq, class: "form-label fw-semibold" do %>
+        <i class="bi bi-fire me-1"></i> 最大カロリー
+      <% end %>
       <%= f.number_field :calorie_lteq, class: "form-control", placeholder: "例）300" %>
     </div>
 
     <div class="col-md-2">
-      <%= f.label :protein_gteq, "最小たんぱく質", class: "form-label" %>
+      <%= f.label :protein_gteq, class: "form-label fw-semibold" do %>
+        <i class="bi bi-egg-fried me-1"></i> 最小たんぱく質
+      <% end %>
       <%= f.number_field :protein_gteq, class: "form-control", placeholder: "例）20" %>
     </div>
 
     <div class="col-md-2">
-      <%= f.label :fat_lteq, "最大脂質", class: "form-label" %>
+      <%= f.label :fat_lteq, class: "form-label fw-semibold" do %>
+        <i class="bi bi-droplet-half me-1"></i> 最大脂質
+      <% end %>
       <%= f.number_field :fat_lteq, class: "form-control", placeholder: "例）10" %>
     </div>
 
     <div class="col-md-2">
-      <%= f.label :carb_lteq, "最大炭水化物", class: "form-label" %>
+      <%= f.label :carb_lteq, class: "form-label fw-semibold" do %>
+        <i class="bi bi-cup-straw me-1"></i> 最大炭水化物
+      <% end %>
       <%= f.number_field :carb_lteq, class: "form-control", placeholder: "例）30" %>
     </div>
 
     <div class="col-12 text-end">
-      <%= f.submit "検索", class: "btn btn-success mt-2 me-2" %>
-      <%= link_to "リセット", posts_path, class: "btn btn-outline-secondary mt-2" %>
+      <%= f.submit "検索", class: "btn btn-success mt-2 me-2 px-4" %>
+      <%= link_to "リセット", posts_path, class: "btn btn-outline-secondary mt-2 px-4" %>
     </div>
   </div>
 <% end %>
@@ -67,6 +88,13 @@
             <li><strong>コメント:</strong> <%= post.comment.presence || "（コメントなし）" %></li>
           </ul>
 
+          <h3>AIおすすめポイント</h3>
+          <% if post.advice.present? %>
+            <p><%= simple_format(post.advice) %></p>
+          <% else %>
+            <p>AIコメントはまだ生成されていません。</p>
+          <% end %>
+
           <div class="d-flex justify-content-between align-items-center">
             <% if user_signed_in? %>
               <% if current_user.liked_posts.exists?(post.id) %>
@@ -86,4 +114,7 @@
   <% end %>
 </div>
 
+<div class="mt-4">
+  <%= paginate @posts %>
+</div>
 
