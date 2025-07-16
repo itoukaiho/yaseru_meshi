@@ -1,31 +1,39 @@
-deploy:
-  needs: [lint, test]
-  runs-on: ubuntu-latest
+name: Deploy to Heroku
 
-  steps:
-    - name: コードをチェックアウト
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+on:
+  push:
+    branches:
+      - main
 
-    - name: Rubyをセットアップ
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.2.2
+jobs:
+  deploy:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
 
-    - name: Bundler & 依存関係インストール
-      run: |
-        gem install bundler
-        bundle install --jobs 4 --retry 3
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: git remote 確認 (デバッグ用)
-      run: git remote -v
+      - name: Rubyをセットアップ
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
 
-    - name: Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.12.12
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-        heroku_email: ${{ secrets.HEROKU_EMAIL }}
-        usedocker: false
-        branch: main
+      - name: Bundler & 依存関係インストール
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+
+      - name: git remote 確認 (デバッグ用)
+        run: git remote -v
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: false
+          branch: main
