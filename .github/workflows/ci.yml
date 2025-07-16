@@ -79,8 +79,9 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
-          - name: Remove existing heroku remote if exists
-            run: git remote remove heroku || true
+
+      - name: Remove existing heroku remote if exists
+        run: git remote remove heroku || true
 
       - name: Add heroku git remote (SSH形式)
         run: git remote add heroku git@heroku.com:${{ secrets.HEROKU_APP_NAME }}.git
