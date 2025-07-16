@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: CI and Deploy
 
 on:
   push:
@@ -6,10 +6,41 @@ on:
       - main
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v3
+      - name: Rubyをセットアップ
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+      - name: Bundler & 依存関係インストール
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+      - name: RuboCop lint チェック
+        run: bundle exec rubocop
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v3
+      - name: Rubyをセットアップ
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+      - name: Bundler & 依存関係インストール
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+      - name: RSpec テスト実行
+        run: bundle exec rspec
+
   deploy:
     needs: [lint, test]
     runs-on: ubuntu-latest
-
     steps:
       - name: コードをチェックアウト
         uses: actions/checkout@v3
