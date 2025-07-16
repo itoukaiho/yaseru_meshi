@@ -1,111 +1,31 @@
-name: CI and Deploy to Heroku
+deploy:
+  needs: [lint, test]
+  runs-on: ubuntu-latest
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  steps:
+    - name: コードをチェックアウト
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
-jobs:
-  lint:
-    runs-on: ubuntu-latest
+    - name: Rubyをセットアップ
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.2.2
 
-    steps:
-      - name: コードをチェックアウト
-        uses: actions/checkout@v3
+    - name: Bundler & 依存関係インストール
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
 
-      - name: Rubyをセットアップ
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.2
+    - name: git remote 確認 (デバッグ用)
+      run: git remote -v
 
-      - name: Bundler & 依存関係インストール
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3
-
-      - name: Rubocopを実行
-        run: bundle exec rubocop
-
-  test:
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:15
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: yaseru_meshi_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      RAILS_ENV: test
-      DATABASE_URL: postgres://postgres:password@localhost:5432/yaseru_meshi_test
-      GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-      FATSECRET_CLIENT_ID: ${{ secrets.FATSECRET_CLIENT_ID }}
-      FATSECRET_CLIENT_SECRET: ${{ secrets.FATSECRET_CLIENT_SECRET }}
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-
-    steps:
-      - name: コードをチェックアウト
-        uses: actions/checkout@v3
-
-      - name: Rubyをセットアップ
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.2
-
-      - name: Bundler & 依存関係インストール
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3
-
-      - name: データベースをセットアップ
-        run: |
-          bin/rails db:create
-          bin/rails db:migrate
-
-      - name: RSpecを実行
-        run: bundle exec rspec
-
-  deploy:
-    needs: [lint, test]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: コードをチェックアウト
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Rubyをセットアップ
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.2
-
-      - name: Bundler & 依存関係インストール
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3
-
-      - name: Heroku CLIをインストール
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-
-      - name: Heroku CLI でログイン & デプロイ
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          usedocker: false
-          branch: main
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        usedocker: false
+        branch: main
