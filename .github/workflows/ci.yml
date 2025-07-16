@@ -74,8 +74,10 @@ jobs:
           fetch-depth: 0
 
       - name: Remove existing heroku remote if exists
-        run: |
-          git remote remove heroku || true
+        run: git remote remove heroku || true
+
+      - name: Add heroku git remote
+        run: git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
