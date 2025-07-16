@@ -73,14 +73,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: SSH鍵をセットアップ
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HEROKU_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
+
       - name: Remove existing heroku remote if exists
         run: git remote remove heroku || true
 
-      - name: Add heroku git remote
-        run: git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
-
-      - name: Install Heroku CLI
-        run: curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Add heroku git remote (SSH形式)
+        run: git remote add heroku git@heroku.com:${{ secrets.HEROKU_APP_NAME }}.git
 
       - name: Rubyをセットアップ
         uses: ruby/setup-ruby@v1
@@ -95,11 +99,5 @@ jobs:
       - name: git remote 確認 (デバッグ用)
         run: git remote -v
 
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          usedocker: false
-          branch: main
+      - name: Herokuにpush（デプロイ）
+        run: git push heroku main:refs/heads/main --force
