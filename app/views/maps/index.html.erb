@@ -1,10 +1,17 @@
-<h1>Maps#index</h1>
-<h2>現在地と周辺の痩せメシ店舗</h2>
+<h2 class="text-center my-4 text-primary fw-bold">
+  <i class="bi bi-geo-alt-fill"></i> 現在地と周辺の痩せメシ店舗
+</h2>
 
-<!-- Googleマップ検索ボックスのみ -->
-<input id="placeSearchInput" type="text" placeholder="例: サブウェイ、カフェ" style="width: 300px;">
+<div class="d-flex justify-content-center mb-3">
+  <div class="input-group" style="max-width: 400px;">
+    <span class="input-group-text bg-white">
+      <i class="bi bi-search"></i>
+    </span>
+    <input id="placeSearchInput" type="text" class="form-control" placeholder="例: サブウェイ、カフェ">
+  </div>
+</div>
 
-<div id="map" style="height: 500px; margin-top: 20px;"></div>
+<div id="map" class="rounded shadow" style="height: 500px;"></div>
 
 <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>&libraries=places&callback=initMap">
@@ -20,10 +27,10 @@
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLng = (lng2 - lng1) * Math.PI / 180;
     const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLat / 2) ** 2 +
       Math.cos(lat1 * Math.PI / 180) *
       Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      Math.sin(dLng / 2) ** 2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
@@ -36,7 +43,11 @@
 
       map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
-        center: userLocation
+        center: userLocation,
+        styles: [ /* おしゃれなカラーテーマ例 */
+          { "featureType": "poi", "stylers": [{ "visibility": "off" }] },
+          { "featureType": "transit", "stylers": [{ "visibility": "off" }] }
+        ]
       });
 
       new google.maps.Marker({
@@ -58,8 +69,7 @@
     const posts = <%= raw @posts.map { |p| {
       latitude: p.latitude,
       longitude: p.longitude,
-      title: "#{p.title}（#{p.store}）",
-      store: p.store
+      title: "#{p.title}（#{p.store}）"
     } }.to_json %>;
 
     posts.forEach(post => {
@@ -73,7 +83,6 @@
           title: post.title,
           icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
         });
-
         postMarkers.push(marker);
       }
     });
@@ -95,7 +104,6 @@
       searchMarkers = [];
 
       const bounds = new google.maps.LatLngBounds();
-
       places.forEach(place => {
         if (!place.geometry || !place.geometry.location) return;
 
@@ -103,9 +111,8 @@
           map: map,
           title: place.name,
           position: place.geometry.location,
-          icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+          icon: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png'
         });
-
         searchMarkers.push(marker);
         bounds.extend(place.geometry.location);
       });
